@@ -6,8 +6,8 @@ WORKDIR /app
 # Копируем package.json и package-lock.json
 COPY package*.json ./
 
-# Устанавливаем зависимости
-RUN npm install --production
+# Устанавливаем все зависимости (и dev, и prod)
+RUN npm install
 
 # Копируем исходный код
 COPY . .
@@ -15,8 +15,11 @@ COPY . .
 # Собираем TypeScript в JavaScript
 RUN npm run build
 
+# Удаляем dev-зависимости для уменьшения размера образа
+RUN npm prune --production
+
 # Указываем порт (если ваш сервер слушает другой порт, измените здесь)
-EXPOSE 3000
+EXPOSE 5000
 
 # Запускаем сервер
 CMD ["node", "dist/index.js"] 
