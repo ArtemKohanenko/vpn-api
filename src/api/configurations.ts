@@ -54,7 +54,6 @@ router.get('/request/awg/', (req, res) => {
   // if (!config) {
   //   return res.status(403).json({ error: 'Invalid api_key' });
   // }
-  res.json(228);
 });
 
 export default router;
