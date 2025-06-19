@@ -34,12 +34,14 @@ const clients = {
 };
 
 router.get('/request/awg/', (req, res) => {
+  console.log(`[${new Date().toISOString()}] /request/awg/ called from IP: ${req.ip}`);
   execFile('/bin/bash', ['/scripts/generate_config.sh'], (error, stdout, stderr) => {
     if (error) {
-      console.error('Ошибка при генерации:', stderr);
+      console.error(`[${new Date().toISOString()}] Ошибка при генерации:`, stderr);
       return res.status(500).send('Ошибка при генерации конфига');
     }
 
+    console.log(`[${new Date().toISOString()}] Конфиг успешно сгенерирован для IP: ${req.ip}`);
     res.send(stdout);
   });
 
