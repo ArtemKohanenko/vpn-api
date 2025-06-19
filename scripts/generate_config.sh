@@ -50,7 +50,5 @@ JSON_CONFIG=$(cat <<EOF
 EOF
 )
 
-# Вывод vpn:// ссылки
-VPN_URI="vpn://$(echo "$JSON_CONFIG" | base64 -w 0)"
-echo "🔗 Ссылка для импорта:"
-echo "$VPN_URI"
+# Вывод JSON строки
+echo "$JSON_CONFIG"
