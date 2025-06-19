@@ -1,3 +1,4 @@
+import { execFile } from 'child_process';
 import express from 'express';
 
 const router = express.Router();
@@ -33,15 +34,25 @@ const clients = {
 };
 
 router.get('/request/awg/', (req, res) => {
-  const apiKey: string | undefined = req.query.api_key?.toString();
-  if (!apiKey) {
-    return res.status(400).json({ error: 'Missing api_key' });
-  }
-  const config = { config: true };
-  if (!config) {
-    return res.status(403).json({ error: 'Invalid api_key' });
-  }
-  res.json(config);
+  execFile('/bin/bash', ['/scripts/generate_config.sh'], (error, stdout, stderr) => {
+    if (error) {
+      console.error('Ошибка при генерации:', stderr);
+      return res.status(500).send('Ошибка при генерации конфига');
+    }
+
+    res.send(stdout);
+  });
+
+
+  // const apiKey: string | undefined = req.query.api_key?.toString();
+  // if (!apiKey) {
+  //   return res.status(400).json({ error: 'Missing api_key' });
+  // }
+  // const config = { config: true };
+  // if (!config) {
+  //   return res.status(403).json({ error: 'Invalid api_key' });
+  // }
+  // res.json(config);
 });
 
 export default router;
