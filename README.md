@@ -57,3 +57,13 @@ npm run test
 ```
 npm run dev
 ```
+
+
+
+
+docker run -d \
+  --name vpn-api \
+  -p 5000:5000 \
+  --restart always \
+  -v /root/vpn-api/scripts:/scripts \
+  vpn-api
