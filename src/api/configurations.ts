@@ -35,7 +35,7 @@ const clients = {
 
 router.get('/request/awg/', (req, res) => {
   console.log(`[${new Date().toISOString()}] /request/awg/ called from IP: ${req.ip}`);
-  execFile('/bin/bash', ['/scripts/generate_config.sh'], (error, stdout, stderr) => {
+  execFile('/bin/sh', ['/scripts/generate_config.sh'], (error, stdout, stderr) => {
     if (error) {
       console.error(`[${new Date().toISOString()}] Ошибка при генерации:`, error);
       if (stderr) {
