@@ -3,36 +3,6 @@ import express from 'express';
 
 const router = express.Router();
 
-const clients = {
-  'demo-api-key': {
-    config_version: 1.0,
-    containers: [
-      {
-        container: "awg",
-        awg: {
-          client_priv_key: "yJ7/mG3fajAevZ6ozTbYmbonwQ2nfjqsh8FBVw0Ew3w=",
-          client_ip: "10.0.0.238",
-          server_pub_key: "18HGq+NGYrA+NBtkUrK2bAjoU0w/amKROGsdxUkzilw=",
-          server_ip: "164.90.142.218",
-          server_port: "36016",
-          junkPacketCount: "0",
-          junkPacketMinSize: "0",
-          junkPacketMaxSize: "0",
-          initPacketJunkSize: "0",
-          responsePacketJunkSize: "0",
-          initPacketMagicHeader: "00000000",
-          responsePacketMagicHeader: "00000000",
-          underloadPacketMagicHeader: "00000000",
-          transportPacketMagicHeader: "00000000"
-        }
-      }
-    ],
-    defaultContainer: "awg",
-    description: "Ruchey VPN",
-    name: "Ruchey VPN"
-  }
-};
-
 router.get('/request/awg/', (req, res) => {
   console.log(`[${new Date().toISOString()}] /request/awg/ called from IP: ${req.ip}`);
   execFile('/bin/sh', ['/scripts/generate_config.sh'], (error, stdout, stderr) => {

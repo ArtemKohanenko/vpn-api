@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Параметры API (замените на свои реальные значения)
-API_ENDPOINT="http://gateway.getruchey.ru:8080/api/v1/request/awg/"
+API_ENDPOINT="http://gateway.getruchey.ru:8080/api/v1/configurations/request/awg/"
 API_KEY="4uHZMaJH.9lF0xRsLJSs6zyVUHX7zdbN9kjJmchix"
 VPN_NAME="Ruchey"
 VPN_DESCRIPTION="Its Ruchey time!!"
