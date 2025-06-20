@@ -4,8 +4,8 @@ WG_CONF="/etc/wireguard/wg0.conf"
 WG_INTERFACE="wg0"
 
 # Генерация ключей клиента
-CLIENT_PRIVKEY=$(docker exec amnezia-awg wg genkey)
-CLIENT_PUBKEY=$(docker exec -e PRIVKEY="$CLIENT_PRIVKEY" amnezia-awg sh -c 'echo "$PRIVKEY" | wg pubkey')
+CLIENT_PRIVKEY=$(docker exec amnezia-awg wg genkey | tr -d '\n')
+CLIENT_PUBKEY=$(docker exec -e PRIVKEY="$CLIENT_PRIVKEY" amnezia-awg sh -c 'echo "$PRIVKEY" | wg pubkey' | tr -d '\n')
 CLIENT_IP="10.0.0.$((2 + RANDOM % 253))"
 
 # Добавление клиента в конфиг внутри контейнера
