@@ -16,39 +16,10 @@ docker exec amnezia-awg wg-quick down $WG_INTERFACE 2>/dev/null
 docker exec amnezia-awg wg-quick up $WG_INTERFACE
 
 # Получение серверного публичного ключа
-SERVER_PUBKEY=$(docker exec amnezia-awg cat /opt/amnezia/wireguard/publickey)
+SERVER_PUBKEY=$(docker exec amnezia-awg cat /opt/amnezia/wireguard/publickey | tr -d '\r\n')
 
-# Формирование JSON-конфига
-JSON_CONFIG=$(cat <<EOF
-{
-  "config_version": 1.0,
-  "containers": [
-    {
-      "container": "awg",
-      "awg": {
-        "client_priv_key": "$CLIENT_PRIVKEY",
-        "client_ip": "$CLIENT_IP",
-        "server_pub_key": "$SERVER_PUBKEY",
-        "server_ip": "gateway.getruchey.ru",
-        "server_port": "36016",
-        "junkPacketCount": "0",
-        "junkPacketMinSize": "0",
-        "junkPacketMaxSize": "0",
-        "initPacketJunkSize": "0",
-        "responsePacketJunkSize": "0",
-        "initPacketMagicHeader": "00000000",
-        "responsePacketMagicHeader": "00000000",
-        "underloadPacketMagicHeader": "00000000",
-        "transportPacketMagicHeader": "00000000"
-      }
-    }
-  ],
-  "defaultContainer": "awg",
-  "description": "Ruchey VPN",
-  "name": "Ruchey VPN"
-}
-EOF
-)
+# Формирование JSON-конфига через printf
+JSON_CONFIG=$(printf '{\n  "config_version": 1.0,\n  "containers": [\n    {\n      "container": "awg",\n      "awg": {\n        "client_priv_key": "%s",\n        "client_ip": "%s",\n        "server_pub_key": "%s",\n        "server_ip": "gateway.getruchey.ru",\n        "server_port": "36016",\n        "junkPacketCount": "0",\n        "junkPacketMinSize": "0",\n        "junkPacketMaxSize": "0",\n        "initPacketJunkSize": "0",\n        "responsePacketJunkSize": "0",\n        "initPacketMagicHeader": "00000000",\n        "responsePacketMagicHeader": "00000000",\n        "underloadPacketMagicHeader": "00000000",\n        "transportPacketMagicHeader": "00000000"\n      }\n    }\n  ],\n  "defaultContainer": "awg",\n  "description": "Ruchey VPN",\n  "name": "Ruchey VPN"\n}' "$CLIENT_PRIVKEY" "$CLIENT_IP" "$SERVER_PUBKEY")
 
 # Вывод JSON строки
 echo "$JSON_CONFIG"
