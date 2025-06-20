@@ -5,7 +5,7 @@ WG_INTERFACE="wg0"
 
 # Генерация ключей клиента
 CLIENT_PRIVKEY=$(docker exec amnezia-awg wg genkey)
-CLIENT_PUBKEY=$(docker exec amnezia-awg sh -c "echo '$CLIENT_PRIVKEY' | wg pubkey")
+CLIENT_PUBKEY=$(docker exec -e PRIVKEY="$CLIENT_PRIVKEY" amnezia-awg sh -c 'echo "$PRIVKEY" | wg pubkey')
 CLIENT_IP="10.0.0.$((2 + RANDOM % 253))"
 
 # Добавление клиента в конфиг внутри контейнера
