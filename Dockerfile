@@ -27,6 +27,4 @@ EXPOSE 5000
 # Запускаем сервер
 CMD ["node", "dist/index.js"]
 
-RUN apt-get update && \
-    apt-get install -y docker-cli && \
-    rm -rf /var/lib/apt/lists/* 
+RUN apk add --no-cache docker-cli 
