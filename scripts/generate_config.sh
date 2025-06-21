@@ -27,8 +27,7 @@
 RAW_JSON=$(printf '{\n  "dns1": "8.8.8.8",\n  "dns2": "8.8.4.4",\n  "hostName": "164.90.142.218",\n  "containers": [\n    {\n      "awg": {\n        "port": "36016",\n        "transport_proto": "udp"\n      },\n      "container": "amnezia-awg"\n    }\n  ],\n  "defaultContainer": "amnezia-awg",\n  "api_config": {\n    "public_key": {\n      "expires_at": "2025-07-01 13:21:17.496318+00:00"\n    }\n  }\n}')
 
 # Преобразование в JSON-строку (экранирование)
-# JSON_STRING=$(printf '%s' "$RAW_JSON" | jq -Rs .)
-JSON_STRING="$RAW_JSON"
+JSON_STRING=$(printf '%s' "$RAW_JSON" | jq -Rs .)
 
 # Кодирование в base64url
 BASE64URL=$(printf '%s' "$JSON_STRING" | base64 | tr '+/' '-_' | tr -d '=\n')
