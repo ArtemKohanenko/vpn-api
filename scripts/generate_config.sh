@@ -34,9 +34,3 @@ BASE64URL=$(printf '%s' "$JSON_STRING" | base64 | tr '+/' '-_' | tr -d '=\n')
 
 # Добавление префикса и вывод
 echo "vpn://$BASE64URL"
-
-echo "PATH=[$PATH]" >&2
-which docker >&2
-which jq >&2
-which base64 >&2
-whoami >&2
