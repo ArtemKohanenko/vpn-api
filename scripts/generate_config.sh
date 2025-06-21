@@ -24,7 +24,13 @@ SERVER_PUBKEY=$(docker exec amnezia-awg cat /opt/amnezia/wireguard/publickey | t
 # echo "DEBUG: SERVER_PUBKEY=[$SERVER_PUBKEY]" | cat -A
 
 # Формирование JSON-конфига через printf
-JSON_CONFIG=$(printf '{\n  "config_version": 1.0,\n  "containers": [\n    {\n      "container": "awg",\n      "awg": {\n        "client_priv_key": "%s",\n        "client_ip": "%s",\n        "server_pub_key": "%s",\n        "server_ip": "gateway.getruchey.ru",\n        "server_port": "36016",\n        "junkPacketCount": "0",\n        "junkPacketMinSize": "0",\n        "junkPacketMaxSize": "0",\n        "initPacketJunkSize": "0",\n        "responsePacketJunkSize": "0",\n        "initPacketMagicHeader": "00000000",\n        "responsePacketMagicHeader": "00000000",\n        "underloadPacketMagicHeader": "00000000",\n        "transportPacketMagicHeader": "00000000"\n      }\n    }\n  ],\n  "defaultContainer": "awg",\n  "description": "Ruchey VPN",\n  "name": "Ruchey VPN"\n}' "$CLIENT_PRIVKEY" "$CLIENT_IP" "$SERVER_PUBKEY")
+RAW_JSON=$(printf '{\n  "dns1": "8.8.8.8",\n  "dns2": "8.8.4.4",\n  "hostName": "164.90.142.218",\n  "containers": [\n    {\n      "awg": {\n        "port": "36016",\n        "transport_proto": "udp"\n      },\n      "container": "amnezia-awg"\n    }\n  ],\n  "defaultContainer": "amnezia-awg",\n  "api_config": {\n    "public_key": {\n      "expires_at": "2025-07-01 13:21:17.496318+00:00"\n    }\n  }\n}')
 
-# Вывод JSON строки
-echo "$JSON_CONFIG"
+# Преобразование в JSON-строку (экранирование)
+JSON_STRING=$(printf '%s' "$RAW_JSON" | jq -Rs .)
+
+# Кодирование в base64url
+BASE64URL=$(printf '%s' "$JSON_STRING" | base64 | tr '+/' '-_' | tr -d '=\n')
+
+# Добавление префикса и вывод
+echo "vpn://$BASE64URL"
