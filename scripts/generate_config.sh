@@ -1,25 +1,25 @@
 #!/bin/bash
 
-WG_CONF="/etc/wireguard/wg0.conf"
-WG_INTERFACE="wg0"
+# WG_CONF="/etc/wireguard/wg0.conf"
+# WG_INTERFACE="wg0"
 
 # Генерация ключей клиента
-CLIENT_PRIVKEY=$(docker exec amnezia-awg wg genkey | tr -d '\r\n')
-CLIENT_PUBKEY=$(docker exec -e PRIVKEY="$CLIENT_PRIVKEY" amnezia-awg sh -c 'echo "$PRIVKEY" | wg pubkey' | tr -d '\r\n')
-CLIENT_IP="10.0.0.$((2 + RANDOM % 253))"
+# CLIENT_PRIVKEY=$(docker exec amnezia-awg wg genkey | tr -d '\r\n')
+# CLIENT_PUBKEY=$(docker exec -e PRIVKEY="$CLIENT_PRIVKEY" amnezia-awg sh -c 'echo "$PRIVKEY" | wg pubkey' | tr -d '\r\n')
+# CLIENT_IP="10.0.0.$((2 + RANDOM % 253))"
 
 # echo "DEBUG: CLIENT_PRIVKEY=[$CLIENT_PRIVKEY]" | cat -A
 # echo "DEBUG: CLIENT_PUBKEY=[$CLIENT_PUBKEY]" | cat -A
 
 # Добавление клиента в конфиг внутри контейнера
-docker exec -i amnezia-awg sh -c "echo -e '\n[Peer]\nPublicKey = $CLIENT_PUBKEY\nAllowedIPs = $CLIENT_IP/32' >> $WG_CONF"
+# docker exec -i amnezia-awg sh -c "echo -e '\n[Peer]\nPublicKey = $CLIENT_PUBKEY\nAllowedIPs = $CLIENT_IP/32' >> $WG_CONF"
 
-# Перезапуск интерфейса
-docker exec amnezia-awg wg-quick down $WG_INTERFACE 2>/dev/null
-docker exec amnezia-awg wg-quick up $WG_INTERFACE
+# # Перезапуск интерфейса
+# docker exec amnezia-awg wg-quick down $WG_INTERFACE 2>/dev/null
+# docker exec amnezia-awg wg-quick up $WG_INTERFACE
 
 # Получение серверного публичного ключа
-SERVER_PUBKEY=$(docker exec amnezia-awg cat /opt/amnezia/wireguard/publickey | tr -d '\r\n')
+# SERVER_PUBKEY=$(docker exec amnezia-awg cat /opt/amnezia/wireguard/publickey | tr -d '\r\n')
 
 # echo "DEBUG: SERVER_PUBKEY=[$SERVER_PUBKEY]" | cat -A
 
