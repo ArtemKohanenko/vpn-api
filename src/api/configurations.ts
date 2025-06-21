@@ -16,8 +16,7 @@ router.get('/request/awg/', (req, res) => {
 
     console.log(`[${new Date().toISOString()}] Конфиг успешно сгенерирован для IP: ${req.ip}`);
     console.log(stdout);
-    const configJson = JSON.parse(stdout);
-    res.send(configJson);
+    res.send({ config: stdout });
   });
 
 
