@@ -12,9 +12,6 @@ RUN npm install
 # Копируем исходный код
 COPY . .
 
-# Делаем скрипт исполняемым
-RUN chmod +x ./scripts/generate_config.sh
-
 # Собираем TypeScript в JavaScript
 RUN npm run build
 
