@@ -37,7 +37,10 @@ router.get('/key/:id', (req, res) => {
     return res.status(400).json({ error: 'Missing id parameter' });
   }
 
-  execFile('/bin/sh', ['/newclient.sh', id, 'gateway.getruchey.ru', '/etc/wireguard/wg0.conf', 'wg'], (error, stdout, stderr) => {
+  const newClientCommand = `./newclient.sh ${id} gateway.getruchey.ru /etc/wireguard/wg0.conf wg`;
+  const newClientDockerCommand = `docker exec amnezia-awg ${newClientCommand}`;
+
+  exec(newClientDockerCommand, (error, stdout, stderr) => {
     if (error) {
       console.error(`[${new Date().toISOString()}] Ошибка при генерации:`, error);
       if (stderr) {
@@ -49,11 +52,10 @@ router.get('/key/:id', (req, res) => {
     console.log(`[${new Date().toISOString()}] Конфиг успешно сгенерирован для ID: ${id}`);
     console.log(stdout);
 
-    const containerName = 'my_python_container';
-    const pythonScript = `python3 awg-decode.py --encode users/${id}/${id}.conf`; // Путь внутри контейнера
-    const command = `docker exec ${containerName} ${pythonScript}`;
+    const getKeyCommand = `python3 awg-decode.py --encode users/${id}/${id}.conf`; // Путь внутри контейнера
+    const getKeyDockerCommand = `docker exec amnezia-awg ${getKeyCommand}`;
 
-    exec(command, (error, stdout, stderr) => {
+    exec(getKeyDockerCommand, (error, stdout, stderr) => {
         if (error) {
           console.error(`Ошибка: ${error.message}`);
           return;
