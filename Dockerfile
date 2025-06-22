@@ -28,4 +28,4 @@ EXPOSE 5000
 CMD ["node", "dist/index.js"]
 
 RUN apk add --no-cache docker-cli 
-RUN apk add --no-cache jq
+RUN apk add python3 py3-pip
