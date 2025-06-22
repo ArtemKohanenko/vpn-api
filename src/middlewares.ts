@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 
 import ErrorResponse from './interfaces/ErrorResponse';
+import { config } from './config';
 
 export function notFound(req: Request, res: Response, next: NextFunction) {
   res.status(404);
@@ -16,4 +17,12 @@ export function errorHandler(err: Error, req: Request, res: Response<ErrorRespon
     message: err.message,
     stack: process.env.NODE_ENV === 'production' ? '🥞' : err.stack,
   });
+}
+
+export function authCheck(req: Request, res: Response, next: NextFunction) {
+  const token = req.header('Authorization');
+  if (!token || token !== config.TOKEN) {
+    return res.status(401).json({ message: 'Unauthorized' });
+  }
+  next();
 }
