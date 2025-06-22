@@ -7,8 +7,7 @@ services:
     environment:
       - NODE_ENV=production
       - PORT=8080
-    env_file:
-      - .env
+      - TOKEN=${TOKEN}
     ports:
       - "8080:8080"
     restart: always
