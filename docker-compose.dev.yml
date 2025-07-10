@@ -1,0 +1,16 @@
+version: '3.8'
+services:
+  vpn-api-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - NODE_ENV=development
+      - PORT=8080
+      - TOKEN=${DEV_TOKEN}
+    ports:
+      - "8081:8080"
+    restart: always
+    volumes:
+      # - ./scripts:/scripts
+      - /var/run/docker.sock:/var/run/docker.sock
