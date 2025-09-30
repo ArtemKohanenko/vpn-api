@@ -7,5 +7,5 @@ const envSchema = z.object({
 
 export const config = envSchema.parse({
     PORT: process.env.PORT,
-    TOKEN: process.env.JWT_SECRET_KEY,
+    TOKEN: process.env.TOKEN,
 }); 
