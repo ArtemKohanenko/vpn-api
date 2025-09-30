@@ -43,13 +43,13 @@ router.get('/key/cloak/:id', (req, res) => {
   exec(getKeyDockerCommand, (error, stdout, stderr) => {
       if (error) {
         console.error(`Ошибка: ${error.message}`);
-        return;
+        res.send({ status: `Ошибка: ${error.message}`});
       }
       if (stderr) {
         console.error(`stderr: ${stderr}`);
+        res.send({ status: `stderr: ${stderr}`});
         return;
       }
-
       res.send({ key: stdout });
   });
 });
