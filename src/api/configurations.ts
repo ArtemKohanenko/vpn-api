@@ -31,6 +31,29 @@ const router = express.Router();
 //   // }
 // });
 
+
+router.get('/key/cloak/:id', (req, res) => {
+  const { id } = req.params;
+  if (!id) {
+    return res.status(400).json({ error: 'Missing id parameter' });
+  }
+  const getKeyCommand = `./opt/amnezia/openvpn/scripts/add_cloak_user.sh "${id}"`; // Путь внутри контейнера
+  const getKeyDockerCommand = `docker exec amnezia-openvpn-cloak ${getKeyCommand}`;
+
+  exec(getKeyDockerCommand, (error, stdout, stderr) => {
+      if (error) {
+        console.error(`Ошибка: ${error.message}`);
+        return;
+      }
+      if (stderr) {
+        console.error(`stderr: ${stderr}`);
+        return;
+      }
+
+      res.send({ key: stdout });
+  });
+});
+
 router.get('/key/:id', (req, res) => {
   const { id } = req.params;
   if (!id) {
@@ -54,29 +77,6 @@ router.get('/key/:id', (req, res) => {
 
     const getKeyCommand = `python3 awg-decode.py --encode users/${id}/${id}.conf`; // Путь внутри контейнера
     const getKeyDockerCommand = `docker exec amnezia-awg ${getKeyCommand}`;
-
-    exec(getKeyDockerCommand, (error, stdout, stderr) => {
-        if (error) {
-          console.error(`Ошибка: ${error.message}`);
-          return;
-        }
-        if (stderr) {
-          console.error(`stderr: ${stderr}`);
-          return;
-        }
-
-        res.send({ key: stdout });
-    });
-  });
-
-
-  router.get('/key/cloak/:id', (req, res) => {
-  const { id } = req.params;
-  if (!id) {
-    return res.status(400).json({ error: 'Missing id parameter' });
-  }
-    const getKeyCommand = `./opt/amnezia/openvpn/scripts/add_cloak_user.sh "${id}"`; // Путь внутри контейнера
-    const getKeyDockerCommand = `docker exec amnezia-openvpn-cloak ${getKeyCommand}`;
 
     exec(getKeyDockerCommand, (error, stdout, stderr) => {
         if (error) {
